@@ -3,9 +3,14 @@ using UnityEngine;
 
 public class PlayerMovementController : MonoBehaviour
 {
+    [Header("Camere")]
+    private Camera mainCamera;
+    private float _originOrthographicSize;
+    private float zoomInOrthSize;
+
     [Header("Movement Settings")]
     public float moveSpeed = 5f;
-    public float jumpForce = 5f;
+    public float jumpForce = 6f;
     public float acceleration = 10f;                        // 加速度
     public float deceleration = 10f;                        // 减速度 (类似模拟摩擦力)
     public float gravityScale = 1f;
@@ -15,6 +20,7 @@ public class PlayerMovementController : MonoBehaviour
     public float launchCoolDownDuration = 0.5f;
     private int _maxLaunchCount = 1;
     private Vector2 _launchDirection;
+    [SerializeField]private GameObject _shootArrow;
 
     [Header("Physics Settings")]
     public LayerMask groundLayer;
@@ -42,21 +48,32 @@ public class PlayerMovementController : MonoBehaviour
     private bool _isJumpPressed;                            // 接受 InputManager 跳跃按键输入
     private bool _isLaunchPressed;
     private bool _isLongPressing;
+    private Vector3 _mouseOnWorldPosition;
+    private Vector3 _mouseOnScreenPosition;
 
     private void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
         _launchCounter = 0;
+        mainCamera = Camera.main;
+
+        if (mainCamera != null)
+        {
+            _originOrthographicSize = mainCamera.orthographicSize;
+            zoomInOrthSize = _originOrthographicSize * Settings.cameraScale;
+        }
     }
 
     private void OnEnable()
     {
         SimpleEventHandler.PlayerLaunchEvent += OnPlayerLaunch;
+        // SimpleEventHandler.OnLongPressingEvent += OnLongPressing;
     }
 
     private void OnDisable()
     {
         SimpleEventHandler.PlayerLaunchEvent -= OnPlayerLaunch;
+        // SimpleEventHandler.OnLongPressingEvent -= OnLongPressing;
     }
 
     private void Update()
@@ -64,6 +81,18 @@ public class PlayerMovementController : MonoBehaviour
         _moveInput = InputManager.Instance.MovementInput;
         _isJumpPressed = InputManager.Instance.IsJumpPressed;
         _isLongPressing = InputManager.Instance.IsMouseLongPressing;
+        _mouseOnScreenPosition = InputManager.Instance.MousePositionOnScreen;
+
+        if (_isLongPressing)
+        {
+            DrawShootArrow();
+        }
+        else
+        {
+            _shootArrow.gameObject.SetActive(false);
+        }
+
+        // Debug.Log($"IS LP : {_isLongPressing}");
     }
 
     private void FixedUpdate()
@@ -88,9 +117,19 @@ public class PlayerMovementController : MonoBehaviour
         _isLaunchPressed = true;
     }
 
+    /// <summary>
+    /// 定义鼠标长按的时候需要干的事情
+    /// 实现时间缓慢流动
+    /// 实现镜头拉近
+    /// 绘制箭头
+    /// </summary>
+    // private void OnLongPressing()
+    // {
+    //     Debug.Log("On LP");
+    //     StartCoroutine(CameraZoneIn(0.45f));
+    // }
 
     #endregion
-
 
     #region Check
 
@@ -174,8 +213,9 @@ public class PlayerMovementController : MonoBehaviour
         if (!_canLaunch)
             return;
 
-        Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(InputManager.Instance.MousePositionOnScreen);
-        _launchDirection = (mouseWorldPosition - transform.position).normalized;
+        _mouseOnWorldPosition = mainCamera.ScreenToWorldPoint(new Vector3(_mouseOnScreenPosition.x, _mouseOnScreenPosition.y, -mainCamera.transform.position.z));
+
+        _launchDirection = (_mouseOnWorldPosition - transform.position).normalized;
         _rb.linearVelocity = Vector2.zero;                                  // 重置速度
         _rb.AddForce(_launchDirection * launchForce, ForceMode2D.Impulse);
 
@@ -193,6 +233,42 @@ public class PlayerMovementController : MonoBehaviour
         yield return new WaitForSeconds(launchCoolDownDuration);
         _isLaunchingCoolDown = false;
     }
+
+
+    /// <summary>
+    /// 绘制瞄准发射方向的箭头
+    /// </summary>
+    private void DrawShootArrow()
+    {
+        _mouseOnWorldPosition = mainCamera.ScreenToWorldPoint(new Vector3(_mouseOnScreenPosition.x, _mouseOnScreenPosition.y, -mainCamera.transform.position.z));
+
+        Vector2 dir = _mouseOnWorldPosition - transform.position;
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90f;
+        _shootArrow.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        _shootArrow.gameObject.SetActive(true);
+    }
+
+    /// <summary>
+    /// 实现长按逻辑
+    /// </summary>
+    /// <param name="duration"></param>
+    /// <returns></returns>
+    // private IEnumerator CameraZoneIn(float duration)
+    // {
+    //     // TODO: 考虑是否添加镜头缩放 ——— 发现实际效果好像不是很妙
+    //     // Time.timeScale = Settings.timeScale;
+    //     while (InputManager.Instance.IsMouseLongPressing)
+    //     {
+    //         Debug.Log("In LP");
+    //         DrawShootArrow();
+    //         yield return null;
+    //     }
+
+    //     // 结束长按
+    //     _shootArrow.gameObject.SetActive(false);
+
+    //     // Time.timeScale = 1f;
+    // }
 
     void OnDrawGizmosSelected()
     {

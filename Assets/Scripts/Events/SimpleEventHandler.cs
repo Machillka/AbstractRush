@@ -10,4 +10,10 @@ public class SimpleEventHandler
     {
         PlayerLaunchEvent?.Invoke();
     }
+
+    public static UnityAction OnLongPressingEvent;
+    public static void CallLongPressingEvent()
+    {
+        OnLongPressingEvent?.Invoke();
+    }
 }

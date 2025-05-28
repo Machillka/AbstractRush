@@ -1,16 +1,5 @@
-using UnityEngine;
-
-public class Settings : MonoBehaviour
+public class Settings
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public const float timeScale = 0.6f;                       // 时间缩放倍率
+    public const float cameraScale = 0.8f;                     // 镜头拉近倍率
 }

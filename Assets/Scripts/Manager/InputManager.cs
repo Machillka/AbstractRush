@@ -15,7 +15,6 @@ public class InputManager : Singleton<InputManager>
     public bool IsJumpPressed => _inputController.Player.Jump.IsPressed();
 
     public bool IsMouseLongPressing => _isMouseLongPressing;
-    public bool IsAfterMouseLongPressedRelease => _inputController.Player.Launch.IsPressed();
     public Vector2 MousePositionOnScreen => Mouse.current.position.ReadValue();
 
     private bool _isMouseLongPressing = false;
@@ -46,6 +45,8 @@ public class InputManager : Singleton<InputManager>
             {
                 _isMouseLongPressing = true;
                 _isAfterMouseLongPressedRelease = false;
+                SimpleEventHandler.CallLongPressingEvent();
+                Debug.Log("Call!");
             }
         };
 
