@@ -31,6 +31,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Launch",
+                    "type": "Button",
+                    "id": "6e522dab-244c-4521-9bc1-172b93863ae5",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -59,10 +68,10 @@
                 {
                     "name": "",
                     "id": "a7694aa4-7890-4199-863d-e32dde755116",
-                    "path": "",
+                    "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Keyboard&Mouse",
                     "action": "LookAt",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -108,6 +117,17 @@
                     "processors": "",
                     "groups": ";Joystick",
                     "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a7559269-8dbd-4b59-b79c-e7e698d9b568",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "SlowTap(duration=1,pressPoint=0.5)",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Launch",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
