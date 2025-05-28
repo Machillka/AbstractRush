@@ -83,7 +83,8 @@ public class PlayerMovementController : MonoBehaviour
         _isLongPressing = InputManager.Instance.IsMouseLongPressing;
         _mouseOnScreenPosition = InputManager.Instance.MousePositionOnScreen;
 
-        if (_isLongPressing)
+        // TODO: 优化逻辑
+        if (_isLongPressing && !_isLaunchingCoolDown && _launchCounter < _maxLaunchCount)
         {
             DrawShootArrow();
         }
