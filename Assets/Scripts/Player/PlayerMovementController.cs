@@ -51,12 +51,12 @@ public class PlayerMovementController : MonoBehaviour
 
     private void OnEnable()
     {
-        SimpleEventHandler.PlayerLaunchEvent += () => _isLaunchPressed = true;
+        SimpleEventHandler.PlayerLaunchEvent += OnPlayerLaunch;
     }
 
     private void OnDisable()
     {
-
+        SimpleEventHandler.PlayerLaunchEvent -= OnPlayerLaunch;
     }
 
     private void Update()
@@ -81,6 +81,15 @@ public class PlayerMovementController : MonoBehaviour
         LaunchExecute();
     }
 
+    #region Events
+
+    private void OnPlayerLaunch()
+    {
+        _isLaunchPressed = true;
+    }
+
+
+    #endregion
 
 
     #region Check
