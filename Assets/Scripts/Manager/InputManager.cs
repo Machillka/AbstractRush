@@ -9,7 +9,7 @@ public class InputManager : Singleton<InputManager>
 {
     private InputSystemActions _inputController;
     private bool _isDisabledInput;
-    private Vector3 playerPosition => GameObject.FindWithTag("Player").transform.position;
+    // private Vector3 playerPosition => GameObject.FindWithTag("Player").transform.position;
 
     public float MovementInput => _inputController.Player.Move.ReadValue<float>();
     public bool IsJumpPressed => _inputController.Player.Jump.IsPressed();
@@ -18,7 +18,6 @@ public class InputManager : Singleton<InputManager>
     public Vector2 MousePositionOnScreen => Mouse.current.position.ReadValue();
 
     private bool _isMouseLongPressing = false;
-    private bool _isAfterMouseLongPressedRelease = false;
 
     protected override void Awake()
     {
@@ -35,7 +34,7 @@ public class InputManager : Singleton<InputManager>
         {
             // 清除所有长按相关状态
             _isMouseLongPressing = false;
-            _isAfterMouseLongPressedRelease = false;
+            // _isAfterMouseLongPressedRelease = false;
         };
 
         // 进入长按状态
@@ -44,9 +43,9 @@ public class InputManager : Singleton<InputManager>
             if (!_isDisabledInput)
             {
                 _isMouseLongPressing = true;
-                _isAfterMouseLongPressedRelease = false;
-                SimpleEventHandler.CallLongPressingEvent();
-                Debug.Log("Call!");
+                // _isAfterMouseLongPressedRelease = false;
+                // SimpleEventHandler.CallLongPressingEvent();
+                // Debug.Log("Call!");
             }
         };
 

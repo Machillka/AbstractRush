@@ -1,5 +1,8 @@
 using UnityEngine;
 using UnityEngine.Events;
+using TextDisplaying;
+using System;
+using System.Collections.Generic;
 
 public class SimpleEventHandler
 {
@@ -11,9 +14,14 @@ public class SimpleEventHandler
         PlayerLaunchEvent?.Invoke();
     }
 
-    public static UnityAction OnLongPressingEvent;
-    public static void CallLongPressingEvent()
+    public static event Action<List<TextDisplayPiece>> TextDisplayEvent;
+    public static void CallTextDisplayEvent(List<TextDisplayPiece> texts)
     {
-        OnLongPressingEvent?.Invoke();
+        TextDisplayEvent?.Invoke(texts);
     }
+    // public static UnityAction OnLongPressingEvent;
+    // public static void CallLongPressingEvent()
+    // {
+    //     OnLongPressingEvent?.Invoke();
+    // }
 }

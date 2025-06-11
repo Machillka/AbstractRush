@@ -67,13 +67,11 @@ public class PlayerMovementController : MonoBehaviour
     private void OnEnable()
     {
         SimpleEventHandler.PlayerLaunchEvent += OnPlayerLaunch;
-        // SimpleEventHandler.OnLongPressingEvent += OnLongPressing;
     }
 
     private void OnDisable()
     {
         SimpleEventHandler.PlayerLaunchEvent -= OnPlayerLaunch;
-        // SimpleEventHandler.OnLongPressingEvent -= OnLongPressing;
     }
 
     private void Update()
@@ -92,8 +90,6 @@ public class PlayerMovementController : MonoBehaviour
         {
             _shootArrow.gameObject.SetActive(false);
         }
-
-        // Debug.Log($"IS LP : {_isLongPressing}");
     }
 
     private void FixedUpdate()
@@ -117,18 +113,6 @@ public class PlayerMovementController : MonoBehaviour
     {
         _isLaunchPressed = true;
     }
-
-    /// <summary>
-    /// 定义鼠标长按的时候需要干的事情
-    /// 实现时间缓慢流动
-    /// 实现镜头拉近
-    /// 绘制箭头
-    /// </summary>
-    // private void OnLongPressing()
-    // {
-    //     Debug.Log("On LP");
-    //     StartCoroutine(CameraZoneIn(0.45f));
-    // }
 
     #endregion
 
@@ -248,28 +232,6 @@ public class PlayerMovementController : MonoBehaviour
         _shootArrow.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
         _shootArrow.gameObject.SetActive(true);
     }
-
-    /// <summary>
-    /// 实现长按逻辑
-    /// </summary>
-    /// <param name="duration"></param>
-    /// <returns></returns>
-    // private IEnumerator CameraZoneIn(float duration)
-    // {
-    //     // TODO: 考虑是否添加镜头缩放 ——— 发现实际效果好像不是很妙
-    //     // Time.timeScale = Settings.timeScale;
-    //     while (InputManager.Instance.IsMouseLongPressing)
-    //     {
-    //         Debug.Log("In LP");
-    //         DrawShootArrow();
-    //         yield return null;
-    //     }
-
-    //     // 结束长按
-    //     _shootArrow.gameObject.SetActive(false);
-
-    //     // Time.timeScale = 1f;
-    // }
 
     void OnDrawGizmosSelected()
     {
